@@ -1,0 +1,29 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  # 日志编码，解决中文乱码
+  encoding: utf-8
+  # 要采集的日志路径
+  paths:
+    - /var/log/messages          
+    - /var/log/nginx/access.log  
+    - /var/log/nginx/error.log   
+    - /var/log/mysqld.log        
+
+#转发给 Logstash
+# 关闭直接输出到ES
+output.elasticsearch:
+  enabled: false
+
+# 输出到Logstash
+output.logstash:
+    hosts: ["127.0.0.1:5044"]
+
+#单节点优化 
+setup.template.settings:
+  index.number_of_shards: 1
+
+# 关闭自动Kibana仪表盘
+setup.kibana:
+  enabled: false
+setup.enabled: false
